@@ -26,12 +26,13 @@
    .label{color:var(--muted);font-weight:600}
    .value{font-weight:700}
     table{width:100%;border-collapse:collapse;table-layout:fixed}
-    th, td{border:1px solid var(--line);padding:14px;text-align:center;font-size:14px}
-    thead th{background:#f3f4f6;font-weight:700}
-    thead.code{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
+    th, td{border:1px solid var(--line);padding:14px;text-align:center;font-size:14px;vertical-align:middle}
+    thead th{background:#f3f4f6;font-weight:700;line-height:1.25;padding-top:14px;padding-bottom:14px;white-space:normal;word-break:break-word}
+    thead th.code{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-top:4px;line-height:1.2}
+    thead th.code:last-child{font-size:11px;letter-spacing:0.5px;margin-top:2px;color:#4B5563;font-weight:800}
     tfoot td{background:#fafafa;font-weight:700}
    .row-controls{display:flex;gap:8px;justify-content:flex-end}
-   .preview{border:1px dashed var(--line);border-radius:14px;overflow:hidden}
+   .preview{border:1px dashed var(--line);border-radius:14px;overflow:hidden;min-height:100px}
   </style>
 </head>
 <body>
@@ -85,11 +86,11 @@
     const items = []; const el = (id) => document.getElementById(id);
     function todayISO(){ const d=new Date(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${d.getFullYear()}-${m}-${day}`; }
     function br(num){ return num.toLocaleString('pt-BR',{minimumFractionDigits:2, maximumFractionDigits:2}); }
-    function parseNum(v){ if(v===''||v==null) return 0; const s=String(v).replace(/\./g,'').replace(',','.'); const n=parseFloat(s); return isNaN(n)?0:n; }
+    function parseNum(v){ if(v===''||v==null) return 0; let s=String(v).trim(); if(s.includes(',')){ s=s.replace(/\./g,'').replace(',','.'); } const n=parseFloat(s); return isNaN(n)?0:n; }
     function addRow(values={P:'',C:'',M:'',A:''}){ items.push(values); renderEditor(); renderSheet(); }
     function renderEditor(){ const c=el('editorRows'); c.innerHTML=''; items.forEach(it=>{ const row=document.createElement('div'); row.className='grid g4'; row.innerHTML=`<input placeholder="Preto" value="${it.P}"><input placeholder="Cyan" value="${it.C}"><input placeholder="Magenta" value="${it.M}"><input placeholder="Amarelo" value="${it.A}">`; const [p,c2,m,a]=row.querySelectorAll('input'); p.oninput=()=>{it.P=p.value;renderSheet()}; c2.oninput=()=>{it.C=c2.value;renderSheet()}; m.oninput=()=>{it.M=m.value;renderSheet()}; a.oninput=()=>{it.A=a.value;renderSheet()}; c.appendChild(row); }); }
     function renderSheet(){ el('out-resp').textContent=el('resp').value||''; el('out-turno').textContent=el('turno').value||''; const data=el('data').value; el('out-data').textContent=data?data.split('-').reverse().join('/') : ''; el('now').textContent=new Date().toLocaleString('pt-BR'); const tbody=el('tbody'); tbody.innerHTML=''; let tP=0,tC=0,tM=0,tA=0; items.forEach(it=>{ const nP=parseNum(it.P),nC=parseNum(it.C),nM=parseNum(it.M),nA=parseNum(it.A); tP+=nP;tC+=nC;tM+=nM;tA+=nA; const tr=document.createElement('tr'); tr.innerHTML=`<td>${it.P||''}</td><td>${it.C||''}</td><td>${it.M||''}</td><td>${it.A||''}</td>`; tbody.appendChild(tr); }); el('totP').textContent=br(tP); el('totC').textContent=br(tC); el('totM').textContent=br(tM); el('totA').textContent=br(tA); }
-    async function generate(tryShare=true,forceDownload=false){ renderSheet(); const node=el('sheet'); try{ const blob=await htmlToImage.toBlob(node,{pixelRatio:2,backgroundColor:'#ffffff'}); if(!blob) throw new Error(); const url=URL.createObjectURL(blob); el('preview').src=url; const filename=`saldo-tintas-2d-${Date.now()}.png`; const file=new File([blob],filename,{type:'image/png'}); if(tryShare&&navigator.canShare({files:[file]})){ await navigator.share({title:'Saldo de Tintas 2D',files:[file]}); }else if(forceDownload||!tryShare){ const a=document.createElement('a'); a.href=url; a.download=filename; a.click(); } }catch(e){ alert('Não foi possível gerar/compartilhar. Use "Baixar PNG".'); console.error(e); } }
+    async function generate(tryShare=true,forceDownload=false){ renderSheet(); const node=el('sheet'); try{ const blob=await htmlToImage.toBlob(node,{pixelRatio:2,backgroundColor:'#ffffff'}); if(!blob) throw new Error(); const url=URL.createObjectURL(blob); el('preview').src=url; const filename=`saldo-tintas-2d-${Date.now()}.png`; const file=new File([blob],filename,{type:'image/png'}); if(tryShare&&navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({title:'Saldo de Tintas 2D',files:[file]}); }else if(forceDownload||!tryShare){ const a=document.createElement('a'); a.href=url; a.download=filename; a.click(); } }catch(e){ alert('Não foi possível gerar/compartilhar. Use "Baixar PNG".'); console.error(e); } }
     el('add').onclick=()=>addRow({P:'',C:'',M:'',A:''}); el('download').onclick=()=>generate(false,true); el('share').onclick=()=>generate(true,false); ['resp','turno','data'].forEach(id=>el(id).addEventListener('input',renderSheet)); el('data').value=todayISO(); for(let i=0;i<6;i++) addRow({P:'',C:'',M:'',A:''}); renderSheet();
   </script>
 </body>
