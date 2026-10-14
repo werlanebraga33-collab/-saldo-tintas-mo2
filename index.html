@@ -1,97 +1,372 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Saldo de Tintas 2D</title>
-  <style>
-    :root{ --bg:#f6f7f9; --card:#fff; --text:#111; --muted:#667085; --line:#E5E7EB; --radius:18px; }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;color:var(--text)}
-   .wrap{max-width:900px;margin:0 auto;padding:16px 16px 28px}
-    h1{font-size:22px;margin:8px 0 12px}
-   .card{background:var(--card);border-radius:var(--radius);box-shadow:0 4px 20px rgba(0,0,0,.06);padding:14px}
-   .grid{display:grid;gap:10px}
-   .g3{grid-template-columns:1fr 1fr 1fr}
-   .g4{grid-template-columns:1fr 1fr 1fr 1fr}
-    label{font-size:12px;color:var(--muted)}
-    input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:14px}
-   .btn{appearance:none;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px;cursor:pointer}
-   .btn.primary{background:#111;color:#fff;border-color:#111}
-   .muted{color:var(--muted);font-size:12px}
-   .sheet{background:#fff;border-radius:20px;padding:14px;border:1px solid var(--line)}
-   .hdr{border:1px solid var(--line);border-radius:16px;padding:14px 16px;font-weight:800;text-align:center;margin-bottom:12px;font-size:16px}
-   .meta{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:8px;margin-bottom:12px}
-   .box{border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;gap:6px;align-items:center;font-size:14px;flex-wrap:wrap}
-   .label{color:var(--muted);font-weight:600}
-   .value{font-weight:700}
-    table{width:100%;border-collapse:collapse;table-layout:fixed}
-    th, td{border:1px solid var(--line);padding:14px 4px;text-align:center;vertical-align:middle}
-    thead th{background:#f3f4f6;padding:12px 4px 10px 4px}
-    thead tr{height:108px}
-   .cor-nome{display:block;font-size:15px;font-weight:800;color:#111;line-height:1.1}
-   .cod-mo2{display:inline-block;margin-top:7px;font-size:11px;font-weight:900;letter-spacing:0.7px;color:#fff;background:#111;border-radius:999px;padding:4px 9px;line-height:1;white-space:nowrap}
-   .cod-num{display:block;margin-top:8px;font-size:13px;font-weight:600;color:#6B7280;white-space:nowrap;letter-spacing:0.2px}
-    tfoot td{background:#fafafa;font-weight:800;font-size:15px}
-   .row-controls{display:flex;gap:8px;justify-content:flex-end}
-   .preview{border:1px dashed var(--line);border-radius:14px;overflow:hidden;min-height:80px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saldo de Tintas 2D</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--line:#e1e3e6;--ink:#17191d;--muted:#68717f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;padding:16px}
+main{max-width:1000px;margin:0 auto}
+h1,h2,p{margin-top:0}
+h1{font-size:24px;text-align:center;margin-bottom:8px}
+.subtitle{text-align:center;color:var(--muted);margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:18px;box-shadow:0 4px 18px #00000006}
+.fields{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+label{display:block;font-weight:700;color:var(--muted);font-size:14px;margin-bottom:6px}
+input,select{width:100%;min-width:0;padding:12px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff;color:var(--ink)}
+.section-title{font-size:18px;margin:22px 0 10px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:610px}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}
+th{background:#f0f1f3;font-size:14px}
+th small{display:block;color:var(--muted);font-size:12px;margin-top:5px;font-weight:600}
+td input{padding:10px 6px;text-align:center;border-radius:8px}
+tfoot td{font-weight:800;background:#fafafa;font-size:16px}
+.pill{display:inline-block;background:#111;color:#fff;border-radius:20px;padding:4px 10px;margin-top:6px;font-size:12px}
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button{border:0;border-radius:12px;padding:13px 16px;font-weight:700;font-size:15px;cursor:pointer}
+.primary{background:#17191d;color:white}
+.secondary{background:#e9ebef;color:#17191d}
+.note{font-size:13px;color:var(--muted);line-height:1.45}
+#preview{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;overflow:auto}
+.report-head{text-align:center;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+.report-meta{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.meta-box{border:1px solid var(--line);border-radius:10px;padding:12px;font-weight:700}
+.meta-box span{color:var(--muted)}
+.report-section{margin-top:16px}
+.report-section h3{margin:0 0 8px;font-size:17px}
+.report-table{min-width:0}
+.report-table th,.report-table td{padding:10px 6px}
+.report-table th{font-size:14px}
+.report-table td{height:38px}
+.report-table .total{font-weight:800;background:#fafafa}
+.report-footer{font-size:12px;color:var(--muted);margin-top:12px}
+@media(max-width:620px){
+ body{padding:10px}
+ .card{padding:14px}
+ .fields,.report-meta{grid-template-columns:1fr}
+ .fields{gap:10px}
+ h1{font-size:21px}
+ .report-head{padding:14px}
+ .buttons button{flex:1}
+}
+@media print{
+ body{background:white;padding:0}
+ .no-print{display:none!important}
+ .card{box-shadow:none;border:0;padding:0}
+ main{max-width:none}
+ #preview{border:0;padding:0}
+}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Saldo de Tintas 2D</h1>
-    <div class="card grid">
-      <div class="grid g3">
-        <div><label>Responsável</label><input id="resp" placeholder="Ex.: Jozias"></div>
-        <div><label>Turno</label><select id="turno"><option>1º</option><option selected>2º</option><option>3º</option></select></div>
-        <div><label>Data</label><input id="data" type="date"></div>
+<main>
+  <section class="card no-print">
+    <h1>SALDO DE TINTAS 2D</h1>
+    <p class="subtitle">Controle de tintas originais (MO2) e tintas recicladas</p>
+
+    <div class="fields">
+      <div>
+        <label for="responsavel">Responsável</label>
+        <input id="responsavel" placeholder="Nome do responsável">
       </div>
-      <div class="row-controls">
-        <button class="btn" id="add">+ Linha</button>
-        <button class="btn primary" id="share">Gerar & Compartilhar</button>
-        <button class="btn" id="download">Baixar PNG</button>
+      <div>
+        <label for="turno">Turno</label>
+        <select id="turno">
+          <option>1º</option>
+          <option selected>2º</option>
+          <option>3º</option>
+        </select>
+      </div>
+      <div>
+        <label for="data">Data</label>
+        <input id="data" type="date">
       </div>
     </div>
-    <div class="card grid" id="editor">
-      <div id="editorRows" class="grid" style="gap:10px"></div>
-    </div>
-    <div class="sheet" id="sheet">
-      <div class="hdr">SALDO DE TINTAS 2D</div>
-      <div class="meta">
-        <div class="box"><span class="label">Responsável:</span><span class="value" id="out-resp"></span></div>
-        <div class="box"><span class="label">Turno:</span><span class="value" id="out-turno"></span></div>
-        <div class="box"><span class="label">Data:</span><span class="value" id="out-data"></span></div>
-      </div>
-      <table>
+
+    <h2 class="section-title">Tintas originais — MO2</h2>
+    <div class="table-wrap">
+      <table id="originalInput">
         <thead>
           <tr>
-            <th><span class="cor-nome">Preto</span><span class="cod-mo2">MO2</span><span class="cod-num">240840</span></th>
-            <th><span class="cor-nome">Cyan</span><span class="cod-mo2">MO2</span><span class="cod-num">240838</span></th>
-            <th><span class="cor-nome">Magenta</span><span class="cod-mo2">MO2</span><span class="cod-num">240835</span></th>
-            <th><span class="cor-nome">Amarelo</span><span class="cod-mo2">MO2</span><span class="cod-num">240839</span></th>
+            <th>Preto <span class="pill">MO2</span><small>240840</small></th>
+            <th>Cyan <span class="pill">MO2</span><small>240838</small></th>
+            <th>Magenta <span class="pill">MO2</span><small>240835</small></th>
+            <th>Amarelo <span class="pill">MO2</span><small>240839</small></th>
           </tr>
         </thead>
-        <tbody id="tbody"></tbody>
-        <tfoot><tr><td id="totP">0,00</td><td id="totC">0,00</td><td id="totM">0,00</td><td id="totA">0,00</td></tr></tfoot>
+        <tbody></tbody>
+        <tfoot>
+          <tr>
+            <td class="sum">0,00</td>
+            <td class="sum">0,00</td>
+            <td class="sum">0,00</td>
+            <td class="sum">0,00</td>
+          </tr>
+        </tfoot>
       </table>
-      <div class="muted" style="margin-top:8px">Gerado em <span id="now"></span></div>
     </div>
-    <div class="grid" style="margin-top:12px">
-      <div class="muted">Prévia (após gerar):</div>
-      <img id="preview" class="preview" alt="">
+
+    <h2 class="section-title">Tintas recicladas</h2>
+    <div class="table-wrap">
+      <table id="recycledInput">
+        <thead>
+          <tr>
+            <th>Preto <span class="pill">RECICLADO</span></th>
+            <th>Cyan <span class="pill">RECICLADO</span></th>
+            <th>Magenta <span class="pill">RECICLADO</span></th>
+            <th>Amarelo <span class="pill">RECICLADO</span></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <tr>
+            <td class="sum">0,00</td>
+            <td class="sum">0,00</td>
+            <td class="sum">0,00</td>
+            <td class="sum">0,00</td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
-  </div>
-  <script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
-  <script>
-    const items=[];const el=id=>document.getElementById(id);
-    function todayISO(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-    function br(n){return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
-    function parseNum(v){if(v===''||v==null)return 0;let s=String(v).trim();if(s.includes(',')){s=s.replace(/\./g,'').replace(',','.');}const n=parseFloat(s);return isNaN(n)?0:n;}
-    function addRow(v={P:'',C:'',M:'',A:''}){items.push(v);renderEditor();renderSheet();}
-    function renderEditor(){const c=el('editorRows');c.innerHTML='';items.forEach(it=>{const r=document.createElement('div');r.className='grid g4';r.innerHTML=`<input placeholder="Preto" value="${it.P}"><input placeholder="Cyan" value="${it.C}"><input placeholder="Magenta" value="${it.M}"><input placeholder="Amarelo" value="${it.A}">`;const [p,c2,m,a]=r.querySelectorAll('input');p.oninput=()=>{it.P=p.value;renderSheet()};c2.oninput=()=>{it.C=c2.value;renderSheet()};m.oninput=()=>{it.M=m.value;renderSheet()};a.oninput=()=>{it.A=a.value;renderSheet()};c.appendChild(r);});}
-    function renderSheet(){el('out-resp').textContent=el('resp').value||'';el('out-turno').textContent=el('turno').value||'';const d=el('data').value;el('out-data').textContent=d?d.split('-').reverse().join('/') : '';el('now').textContent=new Date().toLocaleString('pt-BR');const tb=el('tbody');tb.innerHTML='';let tP=0,tC=0,tM=0,tA=0;items.forEach(it=>{const nP=parseNum(it.P),nC=parseNum(it.C),nM=parseNum(it.M),nA=parseNum(it.A);tP+=nP;tC+=nC;tM+=nM;tA+=nA;const tr=document.createElement('tr');tr.innerHTML=`<td>${it.P||''}</td><td>${it.C||''}</td><td>${it.M||''}</td><td>${it.A||''}</td>`;tb.appendChild(tr);});el('totP').textContent=br(tP);el('totC').textContent=br(tC);el('totM').textContent=br(tM);el('totA').textContent=br(tA);}
-    async function generate(tryShare=true,forceDl=false){renderSheet();const node=el('sheet');try{const blob=await htmlToImage.toBlob(node,{pixelRatio:2,backgroundColor:'#fff'});if(!blob)throw 0;const url=URL.createObjectURL(blob);el('preview').src=url;const fn=`saldo-2d-${Date.now()}.png`;const file=new File([blob],fn,{type:'image/png'});if(tryShare&&navigator.canShare({files:[file]})){await navigator.share({title:'Saldo 2D',files:[file]});}else if(forceDl||!tryShare){const a=document.createElement('a');a.href=url;a.download=fn;a.click();}}catch(e){alert('Use Baixar PNG');console.error(e);}}
-    el('add').onclick=()=>addRow({P:'',C:'',M:'',A:''});el('download').onclick=()=>generate(false,true);el('share').onclick=()=>generate(true,false);['resp','turno','data'].forEach(id=>el(id).addEventListener('input',renderSheet));el('data').value=todayISO();for(let i=0;i<6;i++)addRow({P:'',C:'',M:'',A:''});renderSheet();
-  </script>
+
+    <div class="buttons">
+      <button class="primary" id="generate">Atualizar prévia</button>
+      <button class="secondary" id="download">Baixar imagem PNG</button>
+      <button class="secondary" id="print">Imprimir</button>
+    </div>
+
+    <p class="note">
+      Preencha as quantidades nas três linhas de cada tabela.
+      Os totais são calculados automaticamente. Este arquivo funciona
+      no navegador; os dados não são enviados para um servidor.
+    </p>
+  </section>
+
+  <section class="card">
+    <div id="preview">
+      <div class="report-head">
+        <h1>SALDO DE TINTAS 2D</h1>
+      </div>
+
+      <div class="report-meta">
+        <div class="meta-box">
+          <span>Responsável:</span> <b id="pResponsavel">—</b>
+        </div>
+        <div class="meta-box">
+          <span>Turno:</span> <b id="pTurno">2º</b>
+        </div>
+        <div class="meta-box">
+          <span>Data:</span> <b id="pData">—</b>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <h3>Tintas originais — MO2</h3>
+        <div class="table-wrap">
+          <table class="report-table" id="originalReport"></table>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <h3>Tintas recicladas</h3>
+        <div class="table-wrap">
+          <table class="report-table" id="recycledReport"></table>
+        </div>
+      </div>
+
+      <div class="report-footer" id="generatedAt"></div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+const colors = [
+  {name:'Preto', code:'240840'},
+  {name:'Cyan', code:'240838'},
+  {name:'Magenta', code:'240835'},
+  {name:'Amarelo', code:'240839'}
+];
+
+const rows = 3;
+
+const fmt = n => (Number(n)||0).toLocaleString('pt-BR',{
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+});
+
+const parse = v => {
+  if(typeof v === 'number') return v;
+  const s = String(v||'').trim().replace(/\s/g,'');
+  if(!s) return 0;
+  if(s.includes(',')) {
+    return Number(s.replace(/\./g,'').replace(',','.'))||0;
+  }
+  return Number(s)||0;
+};
+
+function makeInputs(id){
+  const body = document.querySelector(`#${id} tbody`);
+
+  for(let r=0; r<rows; r++){
+    const tr = document.createElement('tr');
+
+    colors.forEach((c,i)=>{
+      const td = document.createElement('td');
+      const input = document.createElement('input');
+
+      input.type = 'number';
+      input.min = '0';
+      input.step = '0.01';
+      input.inputMode = 'decimal';
+      input.placeholder = '0,00';
+      input.setAttribute(
+        'aria-label',
+        `${id==='originalInput'?'Original':'Reciclada'} ${c.name}, linha ${r+1}`
+      );
+
+      input.dataset.col = i;
+      input.addEventListener('input', update);
+
+      td.appendChild(input);
+      tr.appendChild(td);
+    });
+
+    body.appendChild(tr);
+  }
+}
+
+makeInputs('originalInput');
+makeInputs('recycledInput');
+
+const getValues = id =>
+  [...document.querySelectorAll(`#${id} tbody input`)]
+  .reduce((a,input)=>{
+    a[Number(input.dataset.col)] += parse(input.value);
+    return a;
+  },[0,0,0,0]);
+
+function buildReport(tableId,inputId,recycled){
+  const table = document.getElementById(tableId);
+
+  const headers = colors.map(c =>
+    `<th>${c.name}${
+      recycled
+      ? '<small>RECICLADO</small>'
+      : `<small>MO2 · ${c.code}</small>`
+    }</th>`
+  ).join('');
+
+  let body = '';
+
+  for(let r=0; r<rows; r++){
+    body += '<tr>';
+
+    colors.forEach((c,i)=>{
+      const input = document
+        .querySelectorAll(`#${inputId} tbody tr`)[r]
+        .querySelectorAll('input')[i];
+
+      body += `<td>${input.value ? fmt(parse(input.value)) : '—'}</td>`;
+    });
+
+    body += '</tr>';
+  }
+
+  const totals = getValues(inputId);
+
+  table.innerHTML = `
+    <thead><tr>${headers}</tr></thead>
+    <tbody>${body}</tbody>
+    <tfoot><tr>
+      ${totals.map(v=>`<td class="total">${fmt(v)}</td>`).join('')}
+    </tr></tfoot>
+  `;
+}
+
+function update(){
+  const original = getValues('originalInput');
+  const recycled = getValues('recycledInput');
+
+  document.querySelectorAll('#originalInput tfoot .sum')
+    .forEach((td,i)=>td.textContent=fmt(original[i]));
+
+  document.querySelectorAll('#recycledInput tfoot .sum')
+    .forEach((td,i)=>td.textContent=fmt(recycled[i]));
+
+  document.getElementById('pResponsavel').textContent =
+    document.getElementById('responsavel').value.trim() || '—';
+
+  document.getElementById('pTurno').textContent =
+    document.getElementById('turno').value;
+
+  const d = document.getElementById('data').value;
+
+  document.getElementById('pData').textContent =
+    d ? new Date(d+'T12:00:00').toLocaleDateString('pt-BR') : '—';
+
+  buildReport('originalReport','originalInput',false);
+  buildReport('recycledReport','recycledInput',true);
+
+  document.getElementById('generatedAt').textContent =
+    'Gerado em ' + new Date().toLocaleString('pt-BR');
+}
+
+document.getElementById('generate').addEventListener('click',()=>{
+  update();
+  document.getElementById('preview').scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+  });
+});
+
+document.getElementById('download').addEventListener('click',async()=>{
+  update();
+
+  if(typeof html2canvas !== 'function'){
+    alert('Não foi possível carregar o recurso de imagem. Verifique a internet e tente novamente.');
+    return;
+  }
+
+  const button = document.getElementById('download');
+  button.disabled = true;
+  button.textContent = 'Gerando imagem...';
+
+  try{
+    const canvas = await html2canvas(
+      document.getElementById('preview'),
+      {scale:2,backgroundColor:'#ffffff',useCORS:true}
+    );
+
+    const link = document.createElement('a');
+    link.download = 'saldo-tintas-2D-' +
+      (document.getElementById('data').value || 'sem-data') + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }catch(e){
+    alert('Não foi possível gerar a imagem. Tente novamente.');
+  }finally{
+    button.disabled = false;
+    button.textContent = 'Baixar imagem PNG';
+  }
+});
+
+document.getElementById('print').addEventListener('click',()=>{
+  update();
+  window.print();
+});
+
+['responsavel','turno','data'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',update);
+});
+
+document.getElementById('data').value =
+  new Date().toLocaleDateString('en-CA');
+
+update();
+</script>
 </body>
 </html>
