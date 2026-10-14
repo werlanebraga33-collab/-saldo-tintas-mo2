@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,366 +6,318 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saldo de Tintas 2D</title>
 <style>
-:root{--bg:#f4f5f7;--card:#fff;--line:#e1e3e6;--ink:#17191d;--muted:#68717f}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;padding:16px}
-main{max-width:1000px;margin:0 auto}
-h1,h2,p{margin-top:0}
-h1{font-size:24px;text-align:center;margin-bottom:8px}
-.subtitle{text-align:center;color:var(--muted);margin-bottom:20px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:18px;box-shadow:0 4px 18px #00000006}
-.fields{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
-label{display:block;font-weight:700;color:var(--muted);font-size:14px;margin-bottom:6px}
-input,select{width:100%;min-width:0;padding:12px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff;color:var(--ink)}
-.section-title{font-size:18px;margin:22px 0 10px}
-.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
-table{width:100%;border-collapse:collapse;min-width:610px}
-th,td{border:1px solid var(--line);padding:8px;text-align:center}
-th{background:#f0f1f3;font-size:14px}
-th small{display:block;color:var(--muted);font-size:12px;margin-top:5px;font-weight:600}
-td input{padding:10px 6px;text-align:center;border-radius:8px}
-tfoot td{font-weight:800;background:#fafafa;font-size:16px}
-.pill{display:inline-block;background:#111;color:#fff;border-radius:20px;padding:4px 10px;margin-top:6px;font-size:12px}
-.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-button{border:0;border-radius:12px;padding:13px 16px;font-weight:700;font-size:15px;cursor:pointer}
+body{margin:0;padding:10px;background:#f4f5f7;color:#17191d;font-family:Arial,sans-serif}
+main{max-width:1000px;margin:auto}
+h1{text-align:center;font-size:22px}
+h2{font-size:18px;margin:18px 0 10px}
+.card{background:#fff;border:1px solid #e1e3e6;border-radius:16px;padding:14px;margin-bottom:14px}
+.subtitle{text-align:center;color:#68717f}
+.fields{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:5px}
+input,select{width:100%;min-width:0;padding:10px;border:1px solid #ddd;border-radius:9px;font-size:15px}
+.table-wrap{overflow-x:auto;border:1px solid #ddd;border-radius:9px}
+table{width:100%;border-collapse:collapse;min-width:0;table-layout:fixed}
+th,td{border:1px solid #ddd;text-align:center;padding:6px 3px;overflow-wrap:anywhere}
+th{background:#f0f1f3;font-size:12px}
+th small{display:block;font-size:10px;color:#666;margin-top:4px}
+td input{padding:8px 2px;text-align:center;font-size:14px}
+tfoot td{font-weight:bold;background:#fafafa}
+.pill{display:block;background:#17191d;color:#fff;border-radius:10px;padding:3px;margin-top:4px;font-size:10px}
+.buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+button{flex:1;min-width:130px;border:0;border-radius:10px;padding:12px 8px;font-weight:bold;font-size:14px;cursor:pointer}
 .primary{background:#17191d;color:white}
 .secondary{background:#e9ebef;color:#17191d}
-.note{font-size:13px;color:var(--muted);line-height:1.45}
-#preview{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;overflow:auto}
-.report-head{text-align:center;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
-.report-meta{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:14px}
-.meta-box{border:1px solid var(--line);border-radius:10px;padding:12px;font-weight:700}
-.meta-box span{color:var(--muted)}
-.report-section{margin-top:16px}
-.report-section h3{margin:0 0 8px;font-size:17px}
-.report-table{min-width:0}
-.report-table th,.report-table td{padding:10px 6px}
-.report-table th{font-size:14px}
-.report-table td{height:38px}
-.report-table .total{font-weight:800;background:#fafafa}
-.report-footer{font-size:12px;color:var(--muted);margin-top:12px}
-@media(max-width:620px){
- body{padding:10px}
- .card{padding:14px}
- .fields,.report-meta{grid-template-columns:1fr}
- .fields{gap:10px}
- h1{font-size:21px}
- .report-head{padding:14px}
- .buttons button{flex:1}
+.note{font-size:12px;color:#68717f;line-height:1.4}
+#preview{background:white;padding:10px;border-radius:10px}
+.report-head{text-align:center;border:1px solid #ddd;border-radius:10px;padding:8px;margin-bottom:8px}
+.report-head h1{font-size:19px;margin:4px}
+.report-meta{display:grid;grid-template-columns:1.5fr .7fr .9fr;gap:5px;margin-bottom:8px}
+.meta-box{border:1px solid #ddd;border-radius:7px;padding:7px 4px;font-size:11px;overflow-wrap:anywhere}
+.meta-box span{color:#666}
+.report-section{margin-top:10px}
+.report-section h3{font-size:14px;margin:0 0 5px}
+.report-table th,.report-table td{padding:6px 2px;font-size:11px}
+.report-footer{font-size:9px;color:#777;margin-top:7px}
+@media(max-width:480px){
+ body{padding:8px}
+ .card{padding:9px}
+ .fields{grid-template-columns:1fr 1fr}
+ .fields>div:first-child{grid-column:1/-1}
+ .report-table th,.report-table td{font-size:10px}
+ button{min-width:110px}
 }
 @media print{
- body{background:white;padding:0}
+ body{padding:0;background:white}
  .no-print{display:none!important}
- .card{box-shadow:none;border:0;padding:0}
- main{max-width:none}
- #preview{border:0;padding:0}
+ .card{border:0;padding:0;margin:0}
+ #preview{padding:0}
 }
 </style>
 </head>
 <body>
 <main>
-  <section class="card no-print">
-    <h1>SALDO DE TINTAS 2D</h1>
-    <p class="subtitle">Controle de tintas originais (MO2) e tintas recicladas</p>
+<section class="card no-print">
+<h1>SALDO DE TINTAS 2D</h1>
+<p class="subtitle">Controle de tintas originais e recicladas</p>
 
-    <div class="fields">
-      <div>
-        <label for="responsavel">Responsável</label>
-        <input id="responsavel" placeholder="Nome do responsável">
-      </div>
-      <div>
-        <label for="turno">Turno</label>
-        <select id="turno">
-          <option>1º</option>
-          <option selected>2º</option>
-          <option>3º</option>
-        </select>
-      </div>
-      <div>
-        <label for="data">Data</label>
-        <input id="data" type="date">
-      </div>
-    </div>
+<div class="fields">
+<div>
+<label for="responsavel">Responsável</label>
+<input id="responsavel" placeholder="Nome do responsável">
+</div>
+<div>
+<label for="turno">Turno</label>
+<select id="turno">
+<option>1º</option>
+<option selected>2º</option>
+<option>3º</option>
+</select>
+</div>
+<div>
+<label for="data">Data</label>
+<input id="data" type="date">
+</div>
+</div>
 
-    <h2 class="section-title">Tintas originais — MO2</h2>
-    <div class="table-wrap">
-      <table id="originalInput">
-        <thead>
-          <tr>
-            <th>Preto <span class="pill">MO2</span><small>240840</small></th>
-            <th>Cyan <span class="pill">MO2</span><small>240838</small></th>
-            <th>Magenta <span class="pill">MO2</span><small>240835</small></th>
-            <th>Amarelo <span class="pill">MO2</span><small>240839</small></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-        <tfoot>
-          <tr>
-            <td class="sum">0,00</td>
-            <td class="sum">0,00</td>
-            <td class="sum">0,00</td>
-            <td class="sum">0,00</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+<h2>Tintas originais — MO2</h2>
+<div class="table-wrap">
+<table id="originalInput">
+<thead><tr>
+<th>Preto<span class="pill">MO2</span><small>240840</small></th>
+<th>Cyan<span class="pill">MO2</span><small>240838</small></th>
+<th>Magenta<span class="pill">MO2</span><small>240835</small></th>
+<th>Amarelo<span class="pill">MO2</span><small>240839</small></th>
+</tr></thead>
+<tbody></tbody>
+<tfoot><tr>
+<td class="sum">0,00</td><td class="sum">0,00</td>
+<td class="sum">0,00</td><td class="sum">0,00</td>
+</tr></tfoot>
+</table>
+</div>
 
-    <h2 class="section-title">Tintas recicladas</h2>
-    <div class="table-wrap">
-      <table id="recycledInput">
-        <thead>
-          <tr>
-            <th>Preto <span class="pill">RECICLADO</span></th>
-            <th>Cyan <span class="pill">RECICLADO</span></th>
-            <th>Magenta <span class="pill">RECICLADO</span></th>
-            <th>Amarelo <span class="pill">RECICLADO</span></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-        <tfoot>
-          <tr>
-            <td class="sum">0,00</td>
-            <td class="sum">0,00</td>
-            <td class="sum">0,00</td>
-            <td class="sum">0,00</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+<h2>Tintas recicladas</h2>
+<div class="table-wrap">
+<table id="recycledInput">
+<thead><tr>
+<th>Preto<span class="pill">RECICLADO</span></th>
+<th>Cyan<span class="pill">RECICLADO</span></th>
+<th>Magenta<span class="pill">RECICLADO</span></th>
+<th>Amarelo<span class="pill">RECICLADO</span></th>
+</tr></thead>
+<tbody></tbody>
+<tfoot><tr>
+<td class="sum">0,00</td><td class="sum">0,00</td>
+<td class="sum">0,00</td><td class="sum">0,00</td>
+</tr></tfoot>
+</table>
+</div>
 
-    <div class="buttons">
-      <button class="primary" id="generate">Atualizar prévia</button>
-      <button class="secondary" id="download">Baixar imagem PNG</button>
-      <button class="secondary" id="print">Imprimir</button>
-    </div>
+<div class="buttons">
+<button class="secondary" id="download">Baixar PNG</button>
+<button class="primary" id="share">Compartilhar print no WhatsApp</button>
+<button class="secondary" id="print">Imprimir</button>
+</div>
+<p class="note">Tintas originais: 3 linhas. Tintas recicladas: 2 linhas. Os totais são calculados automaticamente.</p>
+</section>
 
-    <p class="note">
-      Preencha as quantidades nas três linhas de cada tabela.
-      Os totais são calculados automaticamente. Este arquivo funciona
-      no navegador; os dados não são enviados para um servidor.
-    </p>
-  </section>
-
-  <section class="card">
-    <div id="preview">
-      <div class="report-head">
-        <h1>SALDO DE TINTAS 2D</h1>
-      </div>
-
-      <div class="report-meta">
-        <div class="meta-box">
-          <span>Responsável:</span> <b id="pResponsavel">—</b>
-        </div>
-        <div class="meta-box">
-          <span>Turno:</span> <b id="pTurno">2º</b>
-        </div>
-        <div class="meta-box">
-          <span>Data:</span> <b id="pData">—</b>
-        </div>
-      </div>
-
-      <div class="report-section">
-        <h3>Tintas originais — MO2</h3>
-        <div class="table-wrap">
-          <table class="report-table" id="originalReport"></table>
-        </div>
-      </div>
-
-      <div class="report-section">
-        <h3>Tintas recicladas</h3>
-        <div class="table-wrap">
-          <table class="report-table" id="recycledReport"></table>
-        </div>
-      </div>
-
-      <div class="report-footer" id="generatedAt"></div>
-    </div>
-  </section>
+<section class="card">
+<div id="preview">
+<div class="report-head"><h1>SALDO DE TINTAS 2D</h1></div>
+<div class="report-meta">
+<div class="meta-box"><span>Responsável:</span> <b id="pResponsavel">—</b></div>
+<div class="meta-box"><span>Turno:</span> <b id="pTurno">2º</b></div>
+<div class="meta-box"><span>Data:</span> <b id="pData">—</b></div>
+</div>
+<div class="report-section">
+<h3>Tintas originais — MO2</h3>
+<div class="table-wrap"><table class="report-table" id="originalReport"></table></div>
+</div>
+<div class="report-section">
+<h3>Tintas recicladas</h3>
+<div class="table-wrap"><table class="report-table" id="recycledReport"></table></div>
+</div>
+<div class="report-footer" id="generatedAt"></div>
+</div>
+</section>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
-const colors = [
-  {name:'Preto', code:'240840'},
-  {name:'Cyan', code:'240838'},
-  {name:'Magenta', code:'240835'},
-  {name:'Amarelo', code:'240839'}
+const colors=[
+{name:'Preto',code:'240840'},
+{name:'Cyan',code:'240838'},
+{name:'Magenta',code:'240835'},
+{name:'Amarelo',code:'240839'}
 ];
 
-const rows = 3;
+const originalRows=3;
+const recycledRows=2;
 
-const fmt = n => (Number(n)||0).toLocaleString('pt-BR',{
-  minimumFractionDigits:2,
-  maximumFractionDigits:2
+const fmt=n=>(Number(n)||0).toLocaleString('pt-BR',{
+minimumFractionDigits:2,maximumFractionDigits:2
 });
 
-const parse = v => {
-  if(typeof v === 'number') return v;
-  const s = String(v||'').trim().replace(/\s/g,'');
-  if(!s) return 0;
-  if(s.includes(',')) {
-    return Number(s.replace(/\./g,'').replace(',','.'))||0;
-  }
-  return Number(s)||0;
-};
-
 function makeInputs(id){
-  const body = document.querySelector(`#${id} tbody`);
+const body=document.querySelector(`#${id} tbody`);
+const count=id==='originalInput'?originalRows:recycledRows;
 
-  for(let r=0; r<rows; r++){
-    const tr = document.createElement('tr');
+for(let r=0;r<count;r++){
+const tr=document.createElement('tr');
 
-    colors.forEach((c,i)=>{
-      const td = document.createElement('td');
-      const input = document.createElement('input');
+colors.forEach((color,i)=>{
+const td=document.createElement('td');
+const input=document.createElement('input');
+input.type='number';
+input.min='0';
+input.step='0.01';
+input.inputMode='decimal';
+input.placeholder='0';
+input.setAttribute('aria-label',color.name+' linha '+(r+1));
+input.dataset.col=i;
+input.addEventListener('input',update);
+td.appendChild(input);
+tr.appendChild(td);
+});
 
-      input.type = 'number';
-      input.min = '0';
-      input.step = '0.01';
-      input.inputMode = 'decimal';
-      input.placeholder = '0,00';
-      input.setAttribute(
-        'aria-label',
-        `${id==='originalInput'?'Original':'Reciclada'} ${c.name}, linha ${r+1}`
-      );
-
-      input.dataset.col = i;
-      input.addEventListener('input', update);
-
-      td.appendChild(input);
-      tr.appendChild(td);
-    });
-
-    body.appendChild(tr);
-  }
+body.appendChild(tr);
+}
 }
 
 makeInputs('originalInput');
 makeInputs('recycledInput');
 
-const getValues = id =>
-  [...document.querySelectorAll(`#${id} tbody input`)]
-  .reduce((a,input)=>{
-    a[Number(input.dataset.col)] += parse(input.value);
-    return a;
-  },[0,0,0,0]);
+function getValues(id){
+const totals=[0,0,0,0];
+document.querySelectorAll(`#${id} tbody input`).forEach(input=>{
+totals[Number(input.dataset.col)]+=Number(input.value)||0;
+});
+return totals;
+}
 
 function buildReport(tableId,inputId,recycled){
-  const table = document.getElementById(tableId);
+const table=document.getElementById(tableId);
+const count=inputId==='originalInput'?originalRows:recycledRows;
 
-  const headers = colors.map(c =>
-    `<th>${c.name}${
-      recycled
-      ? '<small>RECICLADO</small>'
-      : `<small>MO2 · ${c.code}</small>`
-    }</th>`
-  ).join('');
+const headers=colors.map(color=>
+`<th>${color.name}<small>${
+recycled?'RECICLADO':'MO2 · '+color.code
+}</small></th>`
+).join('');
 
-  let body = '';
+let body='';
 
-  for(let r=0; r<rows; r++){
-    body += '<tr>';
+for(let r=0;r<count;r++){
+body+='<tr>';
+colors.forEach((color,i)=>{
+const input=document.querySelectorAll(`#${inputId} tbody tr`)[r].querySelectorAll('input')[i];
+body+=`<td>${input.value?fmt(Number(input.value)):'—'}</td>`;
+});
+body+='</tr>';
+}
 
-    colors.forEach((c,i)=>{
-      const input = document
-        .querySelectorAll(`#${inputId} tbody tr`)[r]
-        .querySelectorAll('input')[i];
-
-      body += `<td>${input.value ? fmt(parse(input.value)) : '—'}</td>`;
-    });
-
-    body += '</tr>';
-  }
-
-  const totals = getValues(inputId);
-
-  table.innerHTML = `
-    <thead><tr>${headers}</tr></thead>
-    <tbody>${body}</tbody>
-    <tfoot><tr>
-      ${totals.map(v=>`<td class="total">${fmt(v)}</td>`).join('')}
-    </tr></tfoot>
-  `;
+const totals=getValues(inputId);
+table.innerHTML=`
+<thead><tr>${headers}</tr></thead>
+<tbody>${body}</tbody>
+<tfoot><tr>${totals.map(v=>`<td><b>${fmt(v)}</b></td>`).join('')}</tr></tfoot>`;
 }
 
 function update(){
-  const original = getValues('originalInput');
-  const recycled = getValues('recycledInput');
+const original=getValues('originalInput');
+const recycled=getValues('recycledInput');
 
-  document.querySelectorAll('#originalInput tfoot .sum')
-    .forEach((td,i)=>td.textContent=fmt(original[i]));
+document.querySelectorAll('#originalInput tfoot .sum')
+.forEach((td,i)=>td.textContent=fmt(original[i]));
+document.querySelectorAll('#recycledInput tfoot .sum')
+.forEach((td,i)=>td.textContent=fmt(recycled[i]));
 
-  document.querySelectorAll('#recycledInput tfoot .sum')
-    .forEach((td,i)=>td.textContent=fmt(recycled[i]));
+document.getElementById('pResponsavel').textContent=
+document.getElementById('responsavel').value.trim()||'—';
+document.getElementById('pTurno').textContent=
+document.getElementById('turno').value;
 
-  document.getElementById('pResponsavel').textContent =
-    document.getElementById('responsavel').value.trim() || '—';
+const date=document.getElementById('data').value;
+document.getElementById('pData').textContent=date
+?new Date(date+'T12:00:00').toLocaleDateString('pt-BR'):'—';
 
-  document.getElementById('pTurno').textContent =
-    document.getElementById('turno').value;
-
-  const d = document.getElementById('data').value;
-
-  document.getElementById('pData').textContent =
-    d ? new Date(d+'T12:00:00').toLocaleDateString('pt-BR') : '—';
-
-  buildReport('originalReport','originalInput',false);
-  buildReport('recycledReport','recycledInput',true);
-
-  document.getElementById('generatedAt').textContent =
-    'Gerado em ' + new Date().toLocaleString('pt-BR');
+buildReport('originalReport','originalInput',false);
+buildReport('recycledReport','recycledInput',true);
+document.getElementById('generatedAt').textContent=
+'Gerado em '+new Date().toLocaleString('pt-BR');
 }
 
-document.getElementById('generate').addEventListener('click',()=>{
-  update();
-  document.getElementById('preview').scrollIntoView({
-    behavior:'smooth',
-    block:'start'
-  });
+async function createImage(){
+update();
+if(typeof html2canvas!=='function'){
+throw new Error('Verifique a conexão com a internet e tente novamente.');
+}
+return await html2canvas(document.getElementById('preview'),{
+scale:2,backgroundColor:'#ffffff',useCORS:true
 });
+}
 
 document.getElementById('download').addEventListener('click',async()=>{
-  update();
+const button=document.getElementById('download');
+button.disabled=true;
+button.textContent='Gerando...';
+try{
+const canvas=await createImage();
+const link=document.createElement('a');
+link.download='saldo-tintas-2D.png';
+link.href=canvas.toDataURL('image/png');
+link.click();
+}catch(error){alert(error.message||'Não foi possível gerar a imagem.');}
+finally{button.disabled=false;button.textContent='Baixar PNG';}
+});
 
-  if(typeof html2canvas !== 'function'){
-    alert('Não foi possível carregar o recurso de imagem. Verifique a internet e tente novamente.');
-    return;
-  }
+document.getElementById('share').addEventListener('click',async()=>{
+const button=document.getElementById('share');
+button.disabled=true;
+button.textContent='Preparando...';
+try{
+const canvas=await createImage();
+const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+if(!blob)throw new Error('Não foi possível criar a imagem.');
 
-  const button = document.getElementById('download');
-  button.disabled = true;
-  button.textContent = 'Gerando imagem...';
+const file=new File([blob],'saldo-tintas-2D.png',{type:'image/png'});
 
-  try{
-    const canvas = await html2canvas(
-      document.getElementById('preview'),
-      {scale:2,backgroundColor:'#ffffff',useCORS:true}
-    );
-
-    const link = document.createElement('a');
-    link.download = 'saldo-tintas-2D-' +
-      (document.getElementById('data').value || 'sem-data') + '.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  }catch(e){
-    alert('Não foi possível gerar a imagem. Tente novamente.');
-  }finally{
-    button.disabled = false;
-    button.textContent = 'Baixar imagem PNG';
-  }
+if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+await navigator.share({
+files:[file],
+title:'Saldo de Tintas 2D',
+text:'Saldo de tintas originais e recicladas.'
+});
+}else{
+const link=document.createElement('a');
+link.download=file.name;
+link.href=URL.createObjectURL(blob);
+link.click();
+alert('A imagem foi baixada. Abra o WhatsApp e anexe o PNG.');
+}
+}catch(error){
+if(error.name!=='AbortError'){
+alert(error.message||'Não foi possível compartilhar a imagem.');
+}
+}finally{
+button.disabled=false;
+button.textContent='Compartilhar print no WhatsApp';
+}
 });
 
 document.getElementById('print').addEventListener('click',()=>{
-  update();
-  window.print();
+update();
+window.print();
 });
 
 ['responsavel','turno','data'].forEach(id=>{
-  document.getElementById(id).addEventListener('input',update);
+document.getElementById(id).addEventListener('input',update);
 });
 
-document.getElementById('data').value =
-  new Date().toLocaleDateString('en-CA');
+const now=new Date();
+document.getElementById('data').value=
+`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
 
 update();
 </script>
